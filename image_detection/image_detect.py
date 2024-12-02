@@ -7,6 +7,7 @@ from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam
+import requests
 
 # Constants
 IMG_SIZE = 224
@@ -67,6 +68,27 @@ def detect_objects():
                 print(f"Detected: {detected_object}")
                 #send_post_request(detected_object)
                 print('Sending Data..')
+
+
+                # Define the URL for the add_to_cart endpoint
+                url = 'http://127.0.0.1:8001/add_to_cart/'
+
+                # Define the data to send in the POST request
+                data = {
+                    'product_name': detected_object,
+                    'price': '14',
+                    'quantity': '1',
+                }
+
+                # Send a POST request to the server
+                response = requests.post(url, data=data)
+
+                # Check the response
+                if response.status_code == 200:
+                    print("Item added to cart:", response.json())
+                else:
+                    print("Error:", response.status_code, response.text)
+
                 time.sleep(PAUSE_DURATION)  # Pause for 3 seconds
                 print("Place the next item..")
                 consecutive_count = 0

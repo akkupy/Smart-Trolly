@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-center">Purchase History</h2>
+<ul class="list-group">
+    {% for purchase in purchases %}
+    <li class="list-group-item">
+        <strong>Order #{{ purchase.id }}</strong> - {{ purchase.date }}
+        <ul>
+            {% for item in purchase.items.all %}
+            <li>{{ item.name }} - {{ item.quantity }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'dashboard' user_id=user_id %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+{% endblock %}

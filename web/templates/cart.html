@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        // Set up the WebSocket connection to listen for updates
+        let cartSocket = new WebSocket('ws://127.0.0.1:8001/ws/cart/{{ user.id }}/');
+
+        cartSocket.onopen = function(event) {
+        console.log('WebSocket connection established');
+        };
+
+
+
+        cartSocket.onclose = function(event) {
+        console.log('WebSocket connection closed');
+        };
+
+        cartSocket.onmessage = function(e) {
+            console.log('Wow');
+            const data = JSON.parse(e.data);
+            // Update the cart items dynamically
+            if (data.type === 'cart_update') {
+                updateCart(data.cart_items);
+            }
+        };
+
+        // Function to update the cart items in the HTML
+        function updateCart(cartItems) {
+            let cartList = document.getElementById("cart-list");
+            cartList.innerHTML = ""; // Clear the current cart items
+
+            let totalPrice = 0;
+            cartItems.forEach(item => {
+                let li = document.createElement("li");
+                li.classList.add("list-group-item");
+                li.innerHTML = `${item.product_name} (x${item.quantity}) - $${item.price} each 
+                                <span class="float-right">$${item.total_item_price}</span>`;
+                cartList.appendChild(li);
+                totalPrice += item.total_item_price;
+            });
+
+            // Update the total price
+            document.getElementById("total-price").innerText = "$" + totalPrice;
+        }
+
+        // Optionally, handle WebSocket errors
+        cartSocket.onclose = function(e) {
+            console.error('WebSocket connection closed unexpectedly');
+        };
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Your Cart</h1>
+        
+        <h3>Your Cart Summary:</h3>
+        <ul class="list-group" id="cart-list">
+            {% for item in cart.items.all %}
+                <li class="list-group-item">
+                    {{ item.product_name }} (x{{ item.quantity }}) - Rs.{{ item.price }} each
+                    <span class="float-right">Rs.{{ item.total_item_price }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <!-- <h3 class="mt-3">Total Price: <span id="total-price">${{ total_price }}</span></h3> -->
+
+        <a href="" class="btn btn-primary mt-3">Proceed to Checkout</a>
+    </div>
+</body>
+</html>

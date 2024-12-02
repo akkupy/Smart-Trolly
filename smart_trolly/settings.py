@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'db',
     'web',
     'image_detection',
@@ -72,7 +73,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'smart_trolly.wsgi.application'
 
+ASGI_APPLICATION = "smart_trolly.asgi.application"
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 

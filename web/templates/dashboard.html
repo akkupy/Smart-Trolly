@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-center">Welcome, {{ user.name }}</h2>
+<div class="d-grid gap-3 mt-4">
+    <a href="{% url 'previous_purchases' user_id=user_id %}" class="btn btn-secondary">View Previous Purchases</a>
+    <a href="{% url 'start_cart' user_id=user_id %}" class="btn btn-success">Start a Cart</a>
+</div>
+{% endblock %}
