@@ -37,8 +37,9 @@
             cartItems.forEach(item => {
                 let li = document.createElement("li");
                 li.classList.add("list-group-item");
-                li.innerHTML = `${item.product_name} (x${item.quantity}) - $${item.price} each 
-                                <span class="float-right">$${item.total_item_price}</span>`;
+                li.innerHTML = `${item.product_name} (x${item.quantity}) - Rs${item.price} each 
+                                <span class="float-right">Rs${item.total_item_price}</span>
+                                <button class="btn btn-danger btn-sm float-right mr-2" onclick="deleteCartItem(${item.id},this)">Delete</button>`;
                 cartList.appendChild(li);
                 totalPrice += item.total_item_price;
             });
@@ -51,6 +52,21 @@
         cartSocket.onclose = function(e) {
             console.error('WebSocket connection closed unexpectedly');
         };
+        function deleteCartItem(itemId, buttonElement) {
+            fetch(`/delete/${itemId}/`, {
+                method: 'GET', // Use 'DELETE' if following REST conventions
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log(`Item ${itemId} deleted`);
+                    let cartItemRow = buttonElement.closest('li'); // Get the <li> that contains the delete button
+                    cartItemRow.remove();
+                    // Optionally trigger WebSocket update or reload the cart
+                } else {
+                    console.error('Failed to delete item');
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -61,15 +77,16 @@
         <ul class="list-group" id="cart-list">
             {% for item in cart.items.all %}
                 <li class="list-group-item">
-                    {{ item.product_name }} (x{{ item.quantity }}) - Rs.{{ item.price }} each
-                    <span class="float-right">Rs.{{ item.total_item_price }}</span>
+                    {{ item.product_name }} (x{{ item.quantity }})
+                    <span class=""> Rs.{{ item.total_item_price }}</span>
+                    <button class="btn btn-danger btn-sm float-right mr-2" onclick="deleteCartItem({{ item.id }},this)">Delete</button>
                 </li>
             {% endfor %}
         </ul>
 
         <!-- <h3 class="mt-3">Total Price: <span id="total-price">${{ total_price }}</span></h3> -->
 
-        <a href="" class="btn btn-primary mt-3">Proceed to Checkout</a>
+        <a href="{% url 'checkout' user_id=user_id %}" class="btn btn-primary mt-3">Proceed to Checkout</a>
     </div>
 </body>
 </html>

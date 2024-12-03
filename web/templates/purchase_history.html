@@ -5,10 +5,10 @@
 <ul class="list-group">
     {% for purchase in purchases %}
     <li class="list-group-item">
-        <strong>Order #{{ purchase.id }}</strong> - {{ purchase.date }}
+        <strong>Order #{{ purchase.id }}</strong> - {{ purchase.date }} - Total Amount: {{ purchase.total_price }}
         <ul>
-            {% for item in purchase.items.all %}
-            <li>{{ item.name }} - {{ item.quantity }}</li>
+            {% for item in purchase.items %}
+            <li>{{ item.product_name }} - {{ item.quantity }}</li>
             {% endfor %}
         </ul>
     </li>
