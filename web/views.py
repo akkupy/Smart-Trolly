@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 current_user = 0
 
 def redir(request):
-    return redirect('login')
+    return render(request,'home.html')
 
 def checkout(request,user_id):
     user = get_object_or_404(User, id=user_id) # Get the logged-in user

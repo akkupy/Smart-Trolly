@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="mb-4" style="font-size: 2.5rem; font-weight: bold; color: #2c3e50;">Welcome to Smart Trolley System</h1>
+    <p class="mb-5" style="font-size: 1.2rem; color: #7f8c8d;">
+        Experience the future of shopping with our innovative smart trolley system. Simplify your shopping journey 
+        and enjoy seamless checkout like never before!
+    </p>
+
+    <div>
+        <img src="https://via.placeholder.com/400x250" alt="Smart Trolley" class="img-fluid mb-4" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+    </div>
+
+    <a href="{% url 'login' %}" class="btn btn-primary btn-lg" style="width: 200px; font-size: 1.2rem;">Login</a>
+</div>
+{% endblock %}

@@ -7,22 +7,24 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 text-center">
         <h1 class="mb-4">Your Cart Summary</h1>
 
         <h3>Cart Items:</h3>
-        <ul class="list-group mb-3">
+        <ul class="list-group mx-auto mb-3" style="max-width: 600px;">
             {% for item in cart_items %}
-                <li class="list-group-item">
-                    {{ item.product_name }} (x{{ item.quantity }}) - Rs.{{ item.price }} each
-                    <span class="float-right">Rs.{{ item.total_item_price }}</span>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        {{ item.product_name }} (x{{ item.quantity }})
+                    </div>
+                    <span>Rs.{{ item.total_item_price }}</span>
                 </li>
             {% endfor %}
         </ul>
 
         <h3>Total Price: <span>Rs.{{ total_price }}</span></h3>
 
-        <a href="{% url 'pay' user_id=user_id %}" class="btn btn-primary mt-3">Proceed to Pay</a>
+        <a href="{% url 'pay' user_id=user_id %}" class="btn btn-primary mt-4">Proceed to Pay</a>
     </div>
 </body>
 </html>
