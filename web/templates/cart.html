@@ -6,8 +6,7 @@
     <title>Cart</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script>
-        let cartSocket = new WebSocket('ws://127.0.0.1:8001/ws/cart/{{ user.id }}/');
-
+        let cartSocket = new WebSocket(`ws://${window.location.host}/ws/cart/{{ user.id }}/`);
         cartSocket.onopen = function(event) {
             console.log('WebSocket connection established');
         };
