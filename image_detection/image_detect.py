@@ -32,7 +32,7 @@ def detect_objects():
     """
     global model
     model = tf.keras.models.load_model("smart_trolley_model.h5")
-    cap = cv2.VideoCapture(2)
+    cap = cv2.VideoCapture(0)
 
     print("Starting object detection. Press 'q' to quit.")
     detected_object = None
