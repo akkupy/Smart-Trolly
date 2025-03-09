@@ -10,14 +10,14 @@ from tensorflow.keras.optimizers import Adam
 
 # Constants
 IMG_SIZE = 224
-NUM_OBJECTS = 3
+NUM_OBJECTS = 6
 IMAGES_PER_OBJECT = 300
 EPOCHS = 20
 BATCH_SIZE = 32
 DATASET_DIR = "captured_images"
 CONFIDENCE_THRESHOLD = 0.7
 
-object_names = ['Background','Jam','Parachute']  # Names of the objects
+object_names = []  # Names of the objects
 model = None  # Placeholder for the trained model
 
 
@@ -115,6 +115,7 @@ def train_model():
     model.fit(train_data, validation_data=val_data, epochs=EPOCHS, batch_size=BATCH_SIZE)
     model.save("smart_trolley_model.h5")
     print("Model training complete and saved as 'smart_trolley_model.h5'.")
+    print(object_names)
 
 capture_images()
 train_model()

@@ -18,7 +18,15 @@ BATCH_SIZE = 32
 DATASET_DIR = "captured_images"
 CONFIDENCE_THRESHOLD = 0.9
 
-object_names = ['Background','Jam','Parachute']  # Names of the objects
+object_names = ['Background','Colgate', 'Good Day', 'Jam', 'Maggi', 'Parachute']
+product_prices = {
+    'Background': 0.0,  # Assuming 'Background' is just a placeholder for background images, no price
+    'Colgate': 10.0, 
+    'Good Day': 25.0,
+    'Jam': 20.0,
+    'Maggi': 15.0,
+    'Parachute': 20.0
+}
 model = None  # Placeholder for the trained model
 
 CONSECUTIVE_FRAMES = 5  # Number of frames to confirm detection
@@ -76,7 +84,7 @@ def detect_objects():
                 # Define the data to send in the POST request
                 data = {
                     'product_name': detected_object,
-                    'price': '14',
+                    'price': product_prices.get(detected_object, None),
                     'quantity': '1',
                 }
 
@@ -90,6 +98,7 @@ def detect_objects():
                     print("Error:", response.status_code, response.text)
 
                 time.sleep(PAUSE_DURATION)  # Pause for 3 seconds
+                
                 print("Place the next item..")
                 consecutive_count = 0
                 detected_object = None
