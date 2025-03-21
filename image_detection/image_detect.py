@@ -8,6 +8,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam
 import requests
+import RPi.GPIO as GPIO
 
 # Constants
 IMG_SIZE = 224
@@ -30,9 +31,15 @@ product_prices = {
 model = None  # Placeholder for the trained model
 
 CONSECUTIVE_FRAMES = 5  # Number of frames to confirm detection
-PAUSE_DURATION = 3  # Seconds to pause after detection
+PAUSE_DURATION = 7  # Seconds to pause after detection
 POST_URL = "http://your-server-url/endpoint"  # Replace with your POST endpoint
-
+sensor = 36
+buzzer = 35
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(sensor,GPIO.IN)
+GPIO.setup(buzzer,GPIO.OUT)
+GPIO.output(buzzer,False)
+print("IR Sensor Ready...")
 # Step 3: Detect Objects
 def detect_objects():
     """
@@ -50,7 +57,12 @@ def detect_objects():
             if not ret:
                 print("Error accessing camera.")
                 break
-
+            if GPIO.input(sensor):
+               GPIO.output(buzzer,False)
+            else:
+               GPIO.output(buzzer,True)
+               print("Obstacle detected")
+               continue
             # Preprocess the frame
             img = cv2.resize(frame, (IMG_SIZE, IMG_SIZE))
             img_array = np.expand_dims(img / 255.0, axis=0)
@@ -77,7 +89,13 @@ def detect_objects():
                 #send_post_request(detected_object)
                 print('Sending Data..')
 
-
+                GPIO.output(buzzer, True)
+                time.sleep(0.3)
+                GPIO.output(buzzer, False)
+                time.sleep(0.3)
+                GPIO.output(buzzer, True)
+                time.sleep(0.3)
+                GPIO.output(buzzer, False)
                 # Define the URL for the add_to_cart endpoint
                 url = 'http://127.0.0.1:8001/add_to_cart/'
 
